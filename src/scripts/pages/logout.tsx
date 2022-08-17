@@ -1,8 +1,9 @@
 import { getAuth, signOut } from 'firebase/auth';
-import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import '../../styles/navbar.css'
 export default function LogOut(){
   const auth = getAuth();
+	const navigate = useNavigate();
     return(
     <>
     <div className="html-container">
@@ -14,10 +15,10 @@ export default function LogOut(){
                 <li><a  target="_blank" className="active">Home</a></li>
                 <li><a  target="_blank" className="active1">About</a></li>
                 <li><a  target="_blank" className="active3">Support</a></li>
-                <li><a>          <button onClick={()=> signOut(auth)} className="active2">Logout</button>
-</a></li>
+                <button onClick={()=> signOut(auth).then((response)=>{navigate('/')})} className="active2">Logout</button>
               </ul>
             </nav>
+            <h1>Welcome Home!</h1>
           </div>
         </div>
       </div>
@@ -29,19 +30,9 @@ export default function LogOut(){
         </div>
       </div>
       </noscript>
-<template>
-      <div className="flash-fluid">
-        <div className="flash-time">
-          <div className="flash-GIF">
-            
-          </div>
-        </div>
-       </div>
-</template>
 <noscript>     
       <div className="cyrcle-center">
-        <div className="radial-cyrcle">
-          
+        <div className="radial-cyrcle">    
         </div>
       </div>
 </noscript>

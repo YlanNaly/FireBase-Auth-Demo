@@ -19,7 +19,7 @@ const AuthRoute:React.FunctionComponent<IAuthRouteProps> = (props) =>{
         }
         else{
             console.log("nice");
-            navigate('/logout');
+            navigate('/');
         }
     });
 
