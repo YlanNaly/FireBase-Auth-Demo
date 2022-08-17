@@ -3,6 +3,7 @@ import '../../styles/login.css'
 import SignUp from "./signUp";
 import { getAuth , GoogleAuthProvider , signInWithPopup ,FacebookAuthProvider ,GithubAuthProvider , signInWithEmailAndPassword} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { onLog } from "firebase/app";
 
 
 export default function InputAuth(){
@@ -41,40 +42,41 @@ export default function InputAuth(){
 		})
 	}
 	const signInWithFacebook = async()=>{
-		setAuthing(true)
-
-		signInWithPopup(auth ,new FacebookAuthProvider())
+		signInWithPopup(auth ,new FacebookAuthProvider)
 		.then((response)=>{
-			console.log(response)
+			const credential = FacebookAuthProvider.credentialFromResult(response)
 			navigate("/logout")
 		})
 		.catch((e)=>{
 			console.log(e)
-			setAuthing(false)
 		})
 	}
 	const signInWithGithub = async()=>{
-		setAuthing(true)
+		signInWithPopup(auth, new GithubAuthProvider())
+  .then((result) => {
+    const credential = GithubAuthProvider.credentialFromResult(result);
+    const token = credential?.accessToken;
+    const user = result.user;
+	console.log(result.user)
+	navigate("/logout")
+  }).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    const email = error.customData.email;
+    const credential = GithubAuthProvider.credentialFromError(error);
+	console.log(errorCode)
+  });
 
-		signInWithPopup(auth ,new GithubAuthProvider())
-		.then((response)=>{
-			console.log(response)
-			navigate("/logout")
-		})
-		.catch((e)=>{
-			console.log(e)
-			setAuthing(false)
-		})
 	}
     return(
         <>
 		{
-			show || errorMessage==null ? <SignUp/> : <div className="container" id="container">
+			show  ? <SignUp/> : <div className="container" id="container">
 		<div className="form-container sign-in-container">
 			<form action="#">
 				<h1>Sign In</h1>
 				<div className="social-container">
-					<a  className="social" onClick={()=>signInWithFacebook()}><i className="fab fa-facebook "></i></a>
+					<a  className="social" onClick={signInWithFacebook}><i className="fab fa-facebook "></i></a>
 					<a  className="social" onClick={()=>signInWithGoogle()} ><i className="fab fa-google"></i></a>
 					<a  className="social" onClick={()=>signInWithGithub()}><i className="fab fa-github"></i></a>
 				</div>
