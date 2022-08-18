@@ -65,6 +65,13 @@ li a {
   top: 50%;
   left: 50%;
 }
+.active4:hover {
+  color: #fff;
+  animation: 1.5s myFlash linear infinite;
+  text-shadow: 2px 2px 30px #fff;
+  transition: 2s;
+  margin-top: -120px;
+}
 .active3:hover {
   color: #fff;
   animation: 1.5s myFlash linear infinite;

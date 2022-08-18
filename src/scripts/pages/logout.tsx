@@ -1,5 +1,6 @@
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { Loader } from './Loader';
 import '../../styles/navbar.css'
 export default function LogOut(){
   const auth = getAuth();
@@ -12,13 +13,13 @@ export default function LogOut(){
           <div className="navigation">
             <nav>
               <ul className="nav-type">
-                <li><a  target="_blank" className="active">Home</a></li>
-                <li><a  target="_blank" className="active1">About</a></li>
-                <li><a  target="_blank" className="active3">Support</a></li>
+                <li><a  target="_blank" className="active">Welcome </a></li>
+                <li><a  target="_blank" className="active1">To</a></li>
+                <li><a  target="_blank" className="active3">VACATION</a></li>
+                <li><a  target="_blank" className="active4">AGENCY</a></li>
                 <button onClick={()=> signOut(auth).then((response)=>{navigate('/')})} className="active2">Logout</button>
               </ul>
             </nav>
-            <h1>Welcome Home!</h1>
           </div>
         </div>
       </div>

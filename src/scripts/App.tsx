@@ -21,7 +21,7 @@ const App:React.FunctionComponent<IApplicationProps> = (props) => {
       <AuthRoute>
         <LogOut/>
       </AuthRoute> 
-      } path='/logout'/>
+      } path='home'/>
     </Routes>
   </BrowserRouter>
   </>

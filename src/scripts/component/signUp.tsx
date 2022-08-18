@@ -1,9 +1,8 @@
-import { ReactComponentElement, useState } from "react";
+import { useState } from "react";
 import '../../styles/App.css';
 import Login from "../pages/log";
 import { getAuth , GoogleAuthProvider , signInWithPopup ,FacebookAuthProvider ,GithubAuthProvider , signInWithEmailAndPassword} from "firebase/auth";
 import { createUserWithEmailAndPassword} from 'firebase/auth';
-import { FirebaseApp } from "firebase/app";
 import { useNavigate } from "react-router-dom";
 
 export default function SignUp(){
@@ -19,9 +18,20 @@ export default function SignUp(){
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const user = userCredential.user;
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+		  console.log(userCredential.user)
+		  navigate('home')
         })
         .catch((error) => {
           setError(error.code);
+          setError(error.message);
+		  console.log(error.code)
+        });
+        })
+        .catch((error) => {
+          setError(error.code);
+          setError(error.customData.email)
           setError(error.message);
         });
     }
@@ -29,20 +39,26 @@ export default function SignUp(){
 		signInWithPopup(auth, new GoogleAuthProvider())
 		.then((response)=>{
 			console.log(response.user.uid);
-			navigate('/logout');
+			navigate('home');
 		})
-		.catch((e)=>{
-			console.log(e);
+		.catch((error)=>{
+			console.log(error);
+            setError(error.code);
+            setError(error.customData.email)
+            setError(error.message);
 		})
 	}
 	const signInWithFacebook = async()=>{
 		signInWithPopup(auth ,new FacebookAuthProvider)
 		.then((response)=>{
 			const credential = FacebookAuthProvider.credentialFromResult(response)
-			navigate("/logout")
+			navigate("home")
 		})
-		.catch((e)=>{
-			console.log(e)
+		.catch((error)=>{
+			console.log(error)
+            setError(error.code);
+            setError(error.customData.email)
+            setError(error.message);
 		})
 	}
 	const signInWithGithub = async()=>{
@@ -52,13 +68,16 @@ export default function SignUp(){
     const token = credential?.accessToken;
     const user = result.user;
 	console.log(result.user)
-	navigate("/logout")
+	navigate("home")
   }).catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
     const email = error.customData.email;
     const credential = GithubAuthProvider.credentialFromError(error);
 	console.log(errorCode)
+    setError(error.code);
+    setError(error.customData.email)
+    setError(error.message);
   });
 
 	}
@@ -80,7 +99,9 @@ export default function SignUp(){
                 <input type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} />
                     <p>Have account already , click<a href="#" color="yellow" onClick={()=>setShow(true)} > SIGN IN</a></p>
                 <button onClick={registration}>Sign Up</button>
-		<p>{errorMessage}</p>
+                {
+					errorMessage != null ? <p style={{backgroundColor:"#ea4335" , color:"white"}}>{errorMessage}</p> : <p></p>
+				}
             </form>
         </div>
         <div className="overlay-container">

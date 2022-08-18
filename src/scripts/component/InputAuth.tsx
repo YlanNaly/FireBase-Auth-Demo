@@ -1,9 +1,8 @@
-import {  useState } from "react";
+import {  PropsWithChildren, useState } from "react";
 import '../../styles/login.css'
 import SignUp from "./signUp";
 import { getAuth , GoogleAuthProvider , signInWithPopup ,FacebookAuthProvider ,GithubAuthProvider , signInWithEmailAndPassword} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { onLog } from "firebase/app";
 
 
 export default function InputAuth(){
@@ -16,11 +15,12 @@ export default function InputAuth(){
 	const [errorMessage,setError] =useState("");
 	const [authing,setAuthing] =useState(false);
    
-    const registration = async () =>{
+    const registration = async (e:any) =>{
+		e.preventDefault()
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
 		  console.log(userCredential.user)
-		  navigate('/logout')
+		  navigate('home')
         })
         .catch((error) => {
           setError(error.code);
@@ -34,7 +34,7 @@ export default function InputAuth(){
 		signInWithPopup(auth, new GoogleAuthProvider())
 		.then((response)=>{
 			console.log(response.user.uid);
-			navigate('/logout');
+			navigate('home');
 		})
 		.catch((e)=>{
 			console.log(e);
@@ -45,7 +45,7 @@ export default function InputAuth(){
 		signInWithPopup(auth ,new FacebookAuthProvider)
 		.then((response)=>{
 			const credential = FacebookAuthProvider.credentialFromResult(response)
-			navigate("/logout")
+			navigate("home")
 		})
 		.catch((e)=>{
 			console.log(e)
@@ -58,7 +58,7 @@ export default function InputAuth(){
     const token = credential?.accessToken;
     const user = result.user;
 	console.log(result.user)
-	navigate("/logout")
+	navigate("home")
   }).catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
@@ -71,7 +71,7 @@ export default function InputAuth(){
     return(
         <>
 		{
-			show  ? <SignUp/> : <div className="container" id="container">
+			show  ? <SignUp/> : <div className="container" id="container" >
 		<div className="form-container sign-in-container">
 			<form action="#">
 				<h1>Sign In</h1>
@@ -84,8 +84,10 @@ export default function InputAuth(){
 				<input type="email" placeholder="Email"  onChange={(e)=>setEmail(e.target.value)}/>
 				<input type="password" placeholder="Password"  onChange={(e)=>setPassword(e.target.value)}/>
 				<p>New there , click<a href="#" color="yellow" onClick={()=>setShow(true)} > SIGN UP</a></p>
-				<button onClick={()=>registration()}>Sign In</button>
-		<p>{errorMessage}</p>
+				<button onClick={registration}>Sign In</button>
+				{
+					errorMessage != null ? <p style={{backgroundColor:"#ea4335"}}>{errorMessage}</p> : <p></p>
+				}
 			</form>
 		</div>
 		<div className="overlay-container">
@@ -101,3 +103,4 @@ export default function InputAuth(){
 </>
     )
 }
+//https://gleeful-hamster-cc2c68.netlify.app
